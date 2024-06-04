@@ -32,6 +32,8 @@ def pascal_triangle(n):
     """
     triangle = [[1]]
     temp_row = []
+    if n <= 0:
+        return []
     for i in range(1, n):
         row = [1] + [temp_row[j - 1] + temp_row[j] for j in range(1, i) if len(temp_row) > 1] + [1]
         temp_row = row
