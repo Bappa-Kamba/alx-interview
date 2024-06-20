@@ -42,10 +42,10 @@ def print_summary():
     """
     Print the metrics summary
     """
-    print(f'File size: {total_file_size}')
+    print(f'File size: {total_file_size}', flush=True)
     for key in sorted(status_codes.keys()):
         if status_codes[key] > 0:
-            print(f'{key}: {status_codes[key]}')
+            print(f'{key}: {status_codes[key]}', flush=True)
 
 
 if __name__ == '__main__':
