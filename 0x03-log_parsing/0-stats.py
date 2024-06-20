@@ -1,11 +1,14 @@
 #!/usr/bin/python3
 """Log parsing module"""
-import sys
 import re
 
+
 log_format = re.compile(
-    r'^(\d{1,3}\.){3}\d{1,3} - \[(.*?)\] '
-    r'"GET /projects/260 HTTP/1.1" (\d{3}) (\d+)$'
+    r'^(\d{1,3}\.){3}\d{1,3} - \['
+    r'(\d{2}/\w{3}/\d{4}:\d{2}:\d{2}:\d{2} [-+]\d{4})\] '
+    r'"GET /projects/260 HTTP/1.1" '
+    r'(\d{3}) '
+    r'(\d+)$'
 )
 
 total_file_size = 0
@@ -22,48 +25,39 @@ status_codes = {
 }
 
 
-def extract_input(line):
-    """Extracts and parses parts of the log line."""
+def update_metrics(line):
+    """
+    Update metrics with the information from the log line
+    """
+    global total_file_size, status_codes
+
     match = log_format.match(line)
     if match:
-        return {
-            'status_code': int(match.group(3)),
-            'file_size': int(match.group(4))
-        }
-    return None
+        file_size = int(match.group(4))
+        total_file_size += file_size
 
-
-def update_metrics(info):
-    """Updates metrics with the information from the log line."""
-    global total_file_size, status_codes
-    if info:
-        total_file_size += info['file_size']
-        status_code = info['status_code']
+        status_code = int(match.group(3))
         if status_code in status_codes:
             status_codes[status_code] += 1
 
 
 def print_summary():
-    """Prints the metrics summary."""
+    """
+    Print the metrics summary
+    """
     print(f'File size: {total_file_size}', flush=True)
     for key in sorted(status_codes.keys()):
         if status_codes[key] > 0:
             print(f'{key}: {status_codes[key]}', flush=True)
 
 
-def main():
-    """Main function to read input and update metrics."""
-    global line_count
+if __name__ == '__main__':
     try:
-        for line in sys.stdin:
+        while True:
+            line = input()
             line_count += 1
-            info = extract_input(line.strip())
-            update_metrics(info)
+            update_metrics(line.strip())
             if line_count % 10 == 0:
                 print_summary()
     except (KeyboardInterrupt, EOFError):
         print_summary()
-
-
-if __name__ == '__main__':
-    main()
