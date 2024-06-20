@@ -23,6 +23,9 @@ status_codes = {
 
 
 def update_metrics(line):
+    """
+    Update metrics with the information from the log line
+    """
     global total_file_size, status_codes
 
     match = log_format.match(line)
@@ -36,6 +39,9 @@ def update_metrics(line):
 
 
 def print_summary():
+    """
+    Print the metrics summary
+    """
     print(f'File size: {total_file_size}')
     for key in sorted(status_codes.keys()):
         if status_codes[key] > 0:
