@@ -4,8 +4,8 @@ import sys
 import signal
 import re
 
-log_format = re.compile('^(\d{1,3}\.){3}\d{1,3} - \[(.*?)\] \
-"GET /projects/260 HTTP/1.1" (\d{3}) (\d+)$')
+log_format = re.compile('^(\\d{1,3}\\.){3}\\d{1,3} - \\[(.*?)\\] \
+"GET /projects/260 HTTP/1.1" (\\d{3}) (\\d+)$')
 
 total_file_size = 0
 line_count = 0
@@ -20,11 +20,14 @@ status_codes = {
     500: 0,
 }
 
+
 def handle_sigInt(sigInt, frame):
     print_summary()
     sys.exit(0)
 
+
 signal.signal(signal.SIGINT, handle_sigInt)
+
 
 def process_line(line):
     global total_file_size, status_codes
