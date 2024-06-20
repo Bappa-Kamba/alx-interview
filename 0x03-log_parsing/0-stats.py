@@ -29,9 +29,9 @@ def update_metrics(line):
     """
     Update metrics with the information from the log line
     """
-    global total_file_size, status_codes
+    global total_file_size, status_codes, log_format
 
-    match = log_format.fullmatch(line)
+    match = re.fullmatch(log_format, line)
     if match:
         file_size = int(match.group(4))
         total_file_size += file_size
