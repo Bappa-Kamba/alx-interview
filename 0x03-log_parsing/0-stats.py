@@ -3,9 +3,13 @@
 import sys
 import re
 
+
 log_format = re.compile(
-    r'^(\d{1,3}\.){3}\d{1,3} - \[(.*?)\] '
-    r'"GET /projects/260 HTTP/1.1" (\d{3}) (\d+)$'
+    r'^(\d{1,3}\.){3}\d{1,3} - \['
+    r'(\d{2}/\w{3}/\d{4}:\d{2}:\d{2}:\d{2} [-+]\d{4})\] '
+    r'"GET /projects/260 HTTP/1.1" '
+    r'(\d{3}) '
+    r'(\d+)$'
 )
 
 total_file_size = 0
