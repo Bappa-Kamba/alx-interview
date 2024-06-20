@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 """Log parsing module"""
 import sys
-import signal
 import re
 
 log_format = re.compile(
@@ -21,14 +20,6 @@ status_codes = {
     405: 0,
     500: 0,
 }
-
-
-def handle_sigInt(sigInt, frame):
-    print_summary()
-    sys.exit(0)
-
-
-signal.signal(signal.SIGINT, handle_sigInt)
 
 
 def update_metrics(line):
