@@ -51,11 +51,12 @@ def print_summary():
             print(f'{key}: {status_codes[key]}')
 
 
-try:
-    for line in sys.stdin:
-        line_count += 1
-        update_metrics(line.strip())
-        if line_count % 10 == 0:
-            print_summary()
-except (KeyboardInterrupt, EOFError):
-    print_summary()
+if __name__ == '__main__':
+    try:
+        for line in sys.stdin:
+            line_count += 1
+            update_metrics(line.strip())
+            if line_count % 10 == 0:
+                print_summary()
+    except (KeyboardInterrupt, EOFError):
+        print_summary()
