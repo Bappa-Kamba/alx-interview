@@ -4,8 +4,10 @@ import sys
 import signal
 import re
 
-log_format = re.compile('^(\\d{1,3}\\.){3}\\d{1,3} - \\[(.*?)\\] \
-"GET /projects/260 HTTP/1.1" (\\d{3}) (\\d+)$')
+log_format = re.compile(
+    r'^(\d{1,3}\.){3}\d{1,3} - \[(.*?)\] '
+    r'"GET /projects/260 HTTP/1.1" (\d{3}) (\d+)$'
+)
 
 total_file_size = 0
 line_count = 0
@@ -29,16 +31,17 @@ def handle_sigInt(sigInt, frame):
 signal.signal(signal.SIGINT, handle_sigInt)
 
 
-def process_line(line):
+def update_metrics(line):
     global total_file_size, status_codes
 
-    parts = line.split()
-    file_size = int(parts[-1])
-    total_file_size += file_size
+    match = log_format.match(line)
+    if match:
+        file_size = int(match.group(4))
+        total_file_size += file_size
 
-    status_code = int(parts[-2])
-    if status_code in status_codes:
-        status_codes[status_code] += 1
+        status_code = int(match.group(3))
+        if status_code in status_codes:
+            status_codes[status_code] += 1
 
 
 def print_summary():
@@ -48,11 +51,11 @@ def print_summary():
             print(f'{key}: {status_codes[key]}')
 
 
-for line in sys.stdin:
-    line_count += 1
-    match = log_format.match(line)
-    if not match:
-        continue
-    process_line(line)
-    if (line_count % 10 == 0):
-        print_summary()
+try:
+    for line in sys.stdin:
+        line_count += 1
+        update_metrics(line.strip())
+        if line_count % 10 == 0:
+            print_summary()
+except (KeyboardInterrupt, EOFError):
+    print_summary()
