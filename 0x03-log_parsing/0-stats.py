@@ -4,8 +4,11 @@ import sys
 import re
 
 log_format = re.compile(
-    r'^(\d{1,3}\.){3}\d{1,3} - \[(.*?)\] '
-    r'"GET /projects/260 HTTP/1.1" (\d{3}) (\d+)$'
+    r'^(\d{1,3}\.){3}\d{1,3} - \['                  # IP Address
+    r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}\] '  # Date
+    r'"GET /projects/260 HTTP/1.1" '                 # Request
+    r'(\d{3}) '                                      # Status Code
+    r'(\d+)$'                                        # File Size
 )
 
 total_file_size = 0
@@ -25,12 +28,12 @@ status_codes = {
 def update_metrics(line):
     global total_file_size, status_codes
 
-    match = log_format.fullmatch(line)
+    match = log_format.match(line)
     if match:
-        file_size = int(match.group(4))
+        file_size = int(match.group(3))
         total_file_size += file_size
 
-        status_code = int(match.group(3))
+        status_code = int(match.group(2))
         if status_code in status_codes:
             status_codes[status_code] += 1
 
