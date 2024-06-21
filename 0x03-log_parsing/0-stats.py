@@ -36,15 +36,16 @@ def update_metrics(line):
 
 
 def print_summary():
-    print(f'File size: {total_file_size}')
+    print(f'File size: {total_file_size}', flush=True)
     for key in sorted(status_codes.keys()):
         if status_codes[key] > 0:
-            print(f'{key}: {status_codes[key]}')
+            print(f'{key}: {status_codes[key]}', flush=True)
 
 
 if __name__ == '__main__':
     try:
-        for line in sys.stdin:
+        while True:
+            line = input()
             line_count += 1
             update_metrics(line.strip())
             if line_count % 10 == 0:
