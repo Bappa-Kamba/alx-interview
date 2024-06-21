@@ -25,7 +25,7 @@ status_codes = {
 def update_metrics(line):
     global total_file_size, status_codes
 
-    match = log_format.match(line)
+    match = log_format.fullmatch(line)
     if match:
         file_size = int(match.group(4))
         total_file_size += file_size
