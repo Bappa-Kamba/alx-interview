@@ -3,12 +3,13 @@
 import sys
 import re
 
+
 log_format = re.compile(
-    r'^(\d{1,3}\.){3}\d{1,3} - \['                  # IP Address
-    r'\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6}\] '  # Date
-    r'"GET /projects/260 HTTP/1.1" '                 # Request
-    r'(\d{3}) '                                      # Status Code
-    r'(\d+)$'                                        # File Size
+    r'^(?P<ip>\d{1,3}(\.\d{1,3}){3}) - '  # IP Address
+    r'\[(?P<date>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\.\d{6})\] '  # Date
+    r'"GET /projects/260 HTTP/1.1" '  # Request line
+    r'(?P<status_code>\d{3}) '  # Status code
+    r'(?P<file_size>\d+)$'  # File size
 )
 
 total_file_size = 0
@@ -30,10 +31,10 @@ def update_metrics(line):
 
     match = log_format.match(line)
     if match:
-        file_size = int(match.group(3))
+        file_size = int(match.group('file_size'))
         total_file_size += file_size
 
-        status_code = int(match.group(2))
+        status_code = int(match.group('status_code'))
         if status_code in status_codes:
             status_codes[status_code] += 1
 
@@ -47,11 +48,12 @@ def print_summary():
 
 if __name__ == '__main__':
     try:
-        while True:
-            line = input()
+        for line in sys.stdin:
             line_count += 1
             update_metrics(line.strip())
             if line_count % 10 == 0:
                 print_summary()
     except (KeyboardInterrupt, EOFError):
+        print_summary()
+    finally:
         print_summary()
