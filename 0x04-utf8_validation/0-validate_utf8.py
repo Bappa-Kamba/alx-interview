@@ -19,7 +19,7 @@ def validUTF8(data: List[int]) -> bool:
         if num < 0 or num > 255:
             return False
 
-        bin_repr = format(num, '08b')[-8:]
+        bin_repr = format(num, '08b')
         if num_count == 0:
             if bin_repr[0] == '0':
                 continue
