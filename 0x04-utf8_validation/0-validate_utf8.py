@@ -14,6 +14,9 @@ def validUTF8(data: List) -> bool:
         Returns:
             `True` if the data is a valid string, `False otherwise.
     """
+    if not data:
+        return False
+
     num_count = 0
     for num in data:
         bin_repr = format(num, '08b')
