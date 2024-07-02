@@ -16,10 +16,7 @@ def validUTF8(data: List[int]) -> bool:
     """
     num_count = 0  # number of continuation bytes expected
     for num in data:
-        if num < 0 or num > 255:
-            return False
-
-        bin_repr = format(num, '08b')
+        bin_repr = format(num, '08b')[-8:]
         if num_count == 0:
             if bin_repr[0] == '0':
                 continue
