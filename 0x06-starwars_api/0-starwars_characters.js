@@ -29,9 +29,6 @@ fetchMovieDetails(movieID, (err, data) => {
         return;
     }
 
-    console.log(`Title: ${data.title}`);
-    console.log('Characters:');
-
     const characterURLs = data.characters;
     const characterNames = [];
     let index = 0;
