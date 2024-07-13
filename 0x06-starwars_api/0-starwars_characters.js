@@ -34,22 +34,25 @@ fetchMovieDetails(movieID, (err, data) => {
 
     const characterURLs = data.characters;
     const characterNames = [];
-    let completedRequests = 0;
+    let index = 0;
 
-    characterURLs.forEach(url => {
-        fetchCharacterDetails(url, (error, character) => {
-            if (error) {
-                console.log(`Error fetching character details: ${error}`);
-                return;
-            }
+    function fetchNextCharacter() {
+        if (index < characterURLs.length) {
+            fetchCharacterDetails(characterURLs[index], (error, character) => {
+                if (error) {
+                    console.log(`Error fetching character details: ${error}`);
+                    return;
+                }
 
-            characterNames.push(character.name);
-            completedRequests++;
+                characterNames.push(character.name);
+                console.log(character.name);
 
-            if (completedRequests === characterURLs.length) {
-                characterNames.forEach(name => console.log(name));
-            }
-        });
-    });
+                index++;
+                fetchNextCharacter(); // Fetch next character recursively
+            });
+        } else return
+    }
+
+    fetchNextCharacter();
 });
 
