@@ -15,7 +15,7 @@ def makeChange(coins, total):
             of coins needed to amke total
     """
     if total < 0:
-        return -1
+        return 0
 
     # Create a DP array with a large initial value
     dp = [total + 1] * (total + 1)
