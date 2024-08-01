@@ -14,7 +14,7 @@ def makeChange(coins, total):
             0 if total is <= 0, -1 if total cannot be met or fewest number
             of coins needed to amke total
     """
-    if total < 0:
+    if total <= 0:
         return 0
 
     # Create a DP array with a large initial value
