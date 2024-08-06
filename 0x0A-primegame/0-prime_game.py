@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 """ Prime Game Module """
-from typing import List
 
 players = {
     'Maria': 0,
@@ -8,7 +7,7 @@ players = {
 }
 
 
-def prime_factory(n: int) -> List[int]:
+def prime_factory(n: int) -> list[int]:
     """
         Returns a list of all prime numbers up to n
 
@@ -64,7 +63,7 @@ def game_sim(n: int) -> str:
     return 'Ben' if turn == 'Maria' else 'Maria'
 
 
-def isWinner(x: int, nums: List[int]) -> str:
+def isWinner(x: int, nums: list[int]) -> str:
     """
         Determines the player who won the most rounds
 
