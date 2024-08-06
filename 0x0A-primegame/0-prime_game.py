@@ -53,7 +53,7 @@ def game_sim(n: int) -> str:
             # Mark all multiples of the prime as not available
             for multiple in range(prime, n + 1, prime):
                 available_primes[multiple] = False
-            # print(f'Available primes after {turn}\'s turn: {available_primes}')
+            # print(f'Available primes after {turn}\'s turn: {available_}')
             if turn == 'Maria':
                 turn = 'Ben'
             else:
